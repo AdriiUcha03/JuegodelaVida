@@ -1,12 +1,14 @@
-
-import copy, random, sys, time
+import copy
+import random
+import sys
+import time
 
 # Constantes
-ANCHO = 79   # Ancho de la cuadrícula
-ALTO = 20  # Alto de la cuadrícula
+ANCHO = int(input("Dime el ancho de la cuadricula: "))  # Ancho de la cuadrícula
+ALTO = int(input("Dime el alto de la cuadricula: "))  # Alto de la cuadrícula
 
-VIVO = 'O'  # Carácter para la celda viva
-MUERTO = ' '   # Carácter para la celda muerta
+VIVO = str(input("Dime el caracter de la celula viva: "))  # Carácter para la celda viva
+MUERTO = ' '  # Carácter para la celda muerta
 
 # Las variables celulas y siguientesCelulas son diccionarios que contienen
 # el estado actual del juego y el siguiente.
@@ -21,6 +23,8 @@ for x in range(ANCHO):
             siguientesCelulas[(x, y)] = VIVO
         else:
             siguientesCelulas[(x, y)] = MUERTO
+            if siguientesCelulas[x, y] == VIVO and siguientesCelulas[(x-2), (y-2)] == VIVO:
+                siguientesCelulas[(x, y)] = VIVO
 
 while True:  # bucle principal del programa
     # Cada iteración de este bucle es una generación de la simulación del juego de la vida
@@ -39,7 +43,7 @@ while True:  # bucle principal del programa
     for x in range(ANCHO):
         for y in range(ALTO):
             # Obtenemos las coordenadas de las vecinas incluso si están en el límite
-            izquierda  = (x - 1) % ANCHO
+            izquierda = (x - 1) % ANCHO
             derecha = (x + 1) % ANCHO
             arriba = (y - 1) % ALTO
             abajo = (y + 1) % ALTO
@@ -67,9 +71,9 @@ while True:  # bucle principal del programa
             # de los valores actuales
             if celulas[(x, y)] == VIVO and (numVecinasVivas == 2
                                             or numVecinasVivas == 3):
-                    # Cálulas vivas con 2 o 3 vecinas vivas permanecen vivas
-                    siguientesCelulas[(x, y)] = VIVO
-            elif celulas[(x, y)] == MUERTO and numVecinasVivas == 3:
+                # Cálulas vivas con 2 o 3 vecinas vivas permanecen vivas
+                siguientesCelulas[(x, y)] = VIVO
+            elif celulas[(x, y)] == MUERTO and numVecinasVivas >= 2:
                 # Células muertas con 3 vecinas vivas cobran vida
                 siguientesCelulas[(x, y)] = VIVO
             else:
